@@ -4,9 +4,9 @@ export class Game extends Scene {
   constructor() {
     super("Game");
   }
-  init() {
+  init(data) {
     this.score = 0;
-    this.ballspeed = 300;
+    this.ballspeed = data.ballspeed || 300;
   }
   create() {
     // crear pala como rectangulo
@@ -90,16 +90,19 @@ export class Game extends Scene {
     } else if (this.cursor.left.isDown) {
       this.paddle.x -= 20;
     }
+    console.log(this.ballspeed);
   }
 
   handleCollision = (ball, obstacle) => {
     console.log("collision");
+
     this.score++;
     this.textScore.setText(` ${this.score}`);
     obstacle.destroy();
     if (this.score >= 10) {
-      this.ballspeed += 100;
-      this.scene.restart(); // Reinicia la escena actual
+      this.ballspeed += this.ballspeed * 0.1;
+      this.scene.restart({ ballspeed: this.ballspeed }); //
+      console.log("aumento");
     }
   };
 }
